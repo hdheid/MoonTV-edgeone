@@ -1,5 +1,7 @@
 {
   "homepage_password": "admin123",
+  "siteName": "HHTV",
+  "disable_yellow": true,
   "cache_time": 7200,
   "api_site": {
     "dyttzy": {
