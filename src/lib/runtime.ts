@@ -2,7 +2,10 @@
 /* eslint-disable */
 
 export const config = {
-  "homepage_password": "123...qqqA",
+  "homepage_password": "admin123",
+  "siteName": "HHTV",
+  "disable_yellow": true,
+  "douban_proxy": "https://proxy.hhblog.top/proxy?url=",
   "cache_time": 7200,
   "api_site": {
     "dyttzy": {

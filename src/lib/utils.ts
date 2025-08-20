@@ -46,13 +46,13 @@ export function processImageUrl(originalUrl: string): string {
 export function getDoubanProxyUrl(): string | null {
   if (typeof window === 'undefined') return null;
 
-  // 本地未开启豆瓣代理，则不使用代理
-  const enableDoubanProxy = localStorage.getItem('enableDoubanProxy');
-  if (enableDoubanProxy !== null) {
-    if (!JSON.parse(enableDoubanProxy) as boolean) {
-      return null;
-    }
-  }
+  // 本地未开启豆瓣代理，则不使用代理（默认启用代理）
+  // const enableDoubanProxy = localStorage.getItem('enableDoubanProxy');
+  // if (enableDoubanProxy !== null) {
+  //   if (!JSON.parse(enableDoubanProxy) as boolean) {
+  //     return null;
+  //   }
+  // }
 
   const localDoubanProxy = localStorage.getItem('doubanProxyUrl');
   if (localDoubanProxy != null) {

@@ -1,5 +1,5 @@
 import { API_CONFIG, ApiSite, getConfig } from '@/lib/config';
-import { processDoubanUrl } from './utils';
+import { processDoubanUrl, getDoubanProxyUrl } from './utils';
 import { SearchResult } from '@/lib/types';
 import { cleanHtmlTags } from '@/lib/utils';
 
@@ -31,9 +31,14 @@ export async function searchFromApi(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-    // 浏览器直连，必要时可走公共或自有代理（用与豆瓣相同的兜底思路可另行加入）
-    const response = await fetch(apiUrl, {
-      headers: API_CONFIG.search.headers,
+    // 检查是否使用代理
+    const proxyUrl = getDoubanProxyUrl();
+    const finalUrl = proxyUrl ? `${proxyUrl}${encodeURIComponent(apiUrl)}` : apiUrl;
+    
+    const response = await fetch(finalUrl, {
+      headers: {
+        ...API_CONFIG.search.headers,
+      },
       signal: controller.signal,
     });
 
@@ -120,8 +125,14 @@ export async function searchFromApi(
               8000
             );
 
-            const pageResponse = await fetch(pageUrl, {
-              headers: API_CONFIG.search.headers,
+            // 检查是否使用代理
+            const pageProxyUrl = getDoubanProxyUrl();
+            const pageFinalUrl = pageProxyUrl ? `${pageProxyUrl}${encodeURIComponent(pageUrl)}` : pageUrl;
+            
+            let pageResponse = await fetch(pageFinalUrl, {
+              headers: {
+                ...API_CONFIG.search.headers,
+              },
               signal: pageController.signal,
             });
 
@@ -208,8 +219,14 @@ export async function getDetailFromApi(
 
   let response: Response;
   try {
-    response = await fetch(detailUrl, {
-      headers: API_CONFIG.detail.headers,
+    // 检查是否使用代理
+    const proxyUrl = getDoubanProxyUrl();
+    const finalUrl = proxyUrl ? `${proxyUrl}${encodeURIComponent(detailUrl)}` : detailUrl;
+    
+    response = await fetch(finalUrl, {
+      headers: {
+        ...API_CONFIG.detail.headers,
+      },
       signal: controller.signal,
     });
   } catch (e) {
@@ -311,8 +328,14 @@ async function handleSpecialSourceDetail(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  const response = await fetch(detailUrl, {
-    headers: API_CONFIG.detail.headers,
+  // 检查是否使用代理
+  const proxyUrl = getDoubanProxyUrl();
+  const finalUrl = proxyUrl ? `${proxyUrl}${encodeURIComponent(detailUrl)}` : detailUrl;
+  
+  let response = await fetch(finalUrl, {
+    headers: {
+      ...API_CONFIG.detail.headers,
+    },
     signal: controller.signal,
   });
 
